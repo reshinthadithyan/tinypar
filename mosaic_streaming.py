@@ -71,7 +71,7 @@ class CustomStreamDataLoader(DataLoader):
 def create_streaming_dataloader(data_path_config,batch_size:int,seq_len:int,tokenizer,num_workers,prefetch_factor:int):
 
     dataset = create_dloader_from_path_config(data_path_config)
-    dataloader = CustomStreamDataLoader(dataset,batch_size=32,seqlen=seq_len,enc=tokenizer,num_workers=os.cpu_count(),prefetch_factor=1)
+    dataloader = CustomStreamDataLoader(dataset,batch_size=32,seqlen=seq_len,enc=tokenizer,num_workers=os.cpu_count(),prefetch_factor=prefetch_factor)
     return dataloader
 
 
@@ -82,9 +82,10 @@ if __name__ == "__main__":
     }
     tokenizer = GPTNeoXTokenizerFast.from_pretrained("EleutherAI/gpt-neox-20b")
     logger.info(f"Loaded Tokenizer")
-    dataloader = create_streaming_dataloader(data_path_config,batch_size=32,seq_len=2048,tokenizer=tokenizer,num_workers=os.cpu_count(),prefetch_factor=1)
+    dataloader = create_streaming_dataloader(data_path_config,batch_size=32,seq_len=2048,tokenizer=tokenizer,num_workers=os.cpu_count(),prefetch_factor=2)
     for batch in tqdm(dataloader):
         print(batch)
+        print(batch.shape)
 
 
 
